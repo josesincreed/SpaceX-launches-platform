@@ -1,48 +1,102 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  spacex-backend
+  SpaceX Launches Backend - Serverless Stack
 
-  Sample SAM Template for spacex-backend
-
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
-    Timeout: 3
-
+    Runtime: python3.11
+    Timeout: 30
+    MemorySize: 256
     Tracing: Active
-    # You can add LoggingConfig parameters such as the Logformat, Log Group, and SystemLogLevel or ApplicationLogLevel. Learn more here https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html#sam-function-loggingconfig.
-    LoggingConfig:
-      LogFormat: JSON
-  Api:
-    TracingEnabled: true
+    Environment:
+      Variables:
+        TABLE_NAME: spacex_launches
+
 Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+  # DynamoDB Table
+  SpaceXLaunchesTable:
+    Type: AWS::DynamoDB::Table
     Properties:
-      CodeUri: hello_world/
+      TableName: spacex_launches
+      BillingMode: PAY_PER_REQUEST
+
+      AttributeDefinitions:
+        - AttributeName: launch_id
+          AttributeType: S
+        - AttributeName: status
+          AttributeType: S
+        - AttributeName: launch_date
+          AttributeType: S
+        - AttributeName: rocket_name
+          AttributeType: S
+        - AttributeName: launchpad
+          AttributeType: S
+
+      KeySchema:
+        - AttributeName: launch_id
+          KeyType: HASH
+
+      GlobalSecondaryIndexes:
+        - IndexName: GSI_Status
+          KeySchema:
+            - AttributeName: status
+              KeyType: HASH
+            - AttributeName: launch_date
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+        - IndexName: GSI_Rocket
+          KeySchema:
+            - AttributeName: rocket_name
+              KeyType: HASH
+            - AttributeName: launch_date
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+        - IndexName: GSI_Launchpad
+          KeySchema:
+            - AttributeName: launchpad
+              KeyType: HASH
+            - AttributeName: launch_date
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+        - IndexName: GSI_LaunchDate
+          KeySchema:
+            - AttributeName: launch_date
+              KeyType: HASH
+            - AttributeName: launch_id
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+
+  # Ingest Lambda Function
+  IngestLaunchesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: spacex-launches-ingest
+      CodeUri: src/ingest
       Handler: app.lambda_handler
-      Runtime: python3.14
-      Architectures:
-      - x86_64
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SpaceXLaunchesTable
       Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        ManualInvoke:
+          Type: Api
           Properties:
-            Path: /hello
-            Method: get
+            Path: /api/v1/ingest
+            Method: POST          
 
 Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: API Gateway endpoint URL for Prod stage for Hello World 
-      function
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/Prod/hello/"
-  HelloWorldFunction:
-    Description: Hello World Lambda Function ARN
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: Implicit IAM Role created for Hello World function
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+  DynamoDBTableName:
+    Description: DynamoDB table name
+    Value: !Ref SpaceXLaunchesTable
+  
+ 
+
+
+    
