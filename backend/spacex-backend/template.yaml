@@ -95,6 +95,11 @@ Outputs:
   DynamoDBTableName:
     Description: DynamoDB table name
     Value: !Ref SpaceXLaunchesTable
+
+  IngestApiUrl:
+    Description: API Gateway endpoint for ingest
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/api/v1/ingest"
+  
   
  
 

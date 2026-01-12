@@ -1,6 +1,7 @@
 from spacex_client import get_launches, get_rocket_name, get_launchpad_name
 from dynamodb_repository import upsert_launch
 from models import Launch
+import json
 
 
 def lambda_handler(event, context):
@@ -45,8 +46,11 @@ def lambda_handler(event, context):
         processed += 1
 
     return {
-        "statusCode": 200,
-        "body": {
-            "processed": processed
-        }
-    }
+    "statusCode": 200,
+    "headers": {
+        "Content-Type": "application/json"
+    },
+    "body": json.dumps({
+        "processed": processed
+    })
+}
