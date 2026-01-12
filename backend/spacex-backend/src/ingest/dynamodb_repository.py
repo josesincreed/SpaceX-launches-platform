@@ -7,7 +7,7 @@ IS_LOCAL = os.environ.get("AWS_SAM_LOCAL") == "true"
 
 def upsert_launch(launch: Launch):
     if IS_LOCAL:
-        # Simulación local
+        # Entono de pruebas local, no se realiza ninguna operación real
         print(f"[LOCAL MODE] Upsert launch {launch.launch_id}")
         return
 
