@@ -1,0 +1,8 @@
+{
+  "httpMethod": "POST",
+  "path": "/api/v1/ingest",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": "{}"
+}

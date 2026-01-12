@@ -1,12 +1,20 @@
 import os
-import boto3
 from datetime import datetime
-from .models import Launch
+from models import Launch
 
-table = boto3.resource("dynamodb").Table(os.environ["TABLE_NAME"])
+IS_LOCAL = os.environ.get("AWS_SAM_LOCAL") == "true"
 
 
 def upsert_launch(launch: Launch):
+    if IS_LOCAL:
+        # Simulación local
+        print(f"[LOCAL MODE] Upsert launch {launch.launch_id}")
+        return
+
+    import boto3
+
+    table = boto3.resource("dynamodb").Table(os.environ["TABLE_NAME"])
+
     table.put_item(
         Item={
             "launch_id": launch.launch_id,

@@ -27,3 +27,38 @@ spacex-launches-platform/
 │   └── workflows/            # Pipelines CI/CD (GitHub Actions)
 │
 └── README.md
+
+```
+SpaceX-launches-platform
+├─ backend
+│  ├─ spacex-backend
+│  │  ├─ events
+│  │  │  └─ event.json
+│  │  ├─ hello_world
+│  │  │  ├─ app.py
+│  │  │  ├─ requirements.txt
+│  │  │  └─ __init__.py
+│  │  ├─ README.md
+│  │  ├─ samconfig.toml
+│  │  ├─ template.yaml
+│  │  ├─ tests
+│  │  │  ├─ integration
+│  │  │  │  ├─ test_api_gateway.py
+│  │  │  │  └─ __init__.py
+│  │  │  ├─ requirements.txt
+│  │  │  ├─ unit
+│  │  │  │  ├─ test_handler.py
+│  │  │  │  └─ __init__.py
+│  │  │  └─ __init__.py
+│  │  └─ __init__.py
+│  ├─ src
+│  │  ├─ ingest
+│  │  └─ query
+│  ├─ template.yaml
+│  └─ tests
+├─ frontend
+├─ infrastructure
+│  └─ ecs
+└─ README.md
+
+```

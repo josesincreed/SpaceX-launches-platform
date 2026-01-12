@@ -1,0 +1,17 @@
+# AWS SAM
+.aws-sam/
+
+# Python
+__pycache__/
+*.pyc
+
+# Virtualenv
+.venv/
+env/
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
