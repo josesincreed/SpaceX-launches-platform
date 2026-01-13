@@ -12,6 +12,11 @@ Globals:
     Environment:
       Variables:
         TABLE_NAME: spacex_launches
+  Api:
+    Cors:
+      AllowMethods: "'GET,POST,OPTIONS'"
+      AllowHeaders: "'Content-Type,Authorization'"
+      AllowOrigin: "'*'"
 
 Resources:
   # DynamoDB Table
@@ -89,7 +94,14 @@ Resources:
           Type: Api
           Properties:
             Path: /api/v1/ingest
-            Method: POST          
+            Method: POST     
+
+        ScheduledIngest:
+          Type: Schedule
+          Properties:
+            Schedule: rate(6 hours)
+            Name: spacex-ingest-every-6-hours
+            Description: "Ingest SpaceX launches every 6 hours"     
 
   # Query Lambda Function
   QueryLaunchesFunction:

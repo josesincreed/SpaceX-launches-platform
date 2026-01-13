@@ -9,6 +9,7 @@ import LaunchesByYearChart from "../components/charts/LaunchesByYearChart";
 import Loader from "../components/Loader";
 import Filters from "../components/Filters";
 import type { FiltersValues } from "../components/Filters";
+import IngestionCountdown from "../components/IngestionCountdown";
 
 type ViewMode = "cards" | "table" | "charts";
 
@@ -169,6 +170,9 @@ export default function Home() {
                     }
                 }}
             />
+
+            <IngestionCountdown />
+
 
             {hasActiveFilters && (
                 <Stack direction="row" spacing={1} sx={{ mb: 2 }} flexWrap="wrap">

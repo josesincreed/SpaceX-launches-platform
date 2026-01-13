@@ -37,6 +37,15 @@ def query_by_launch_date(launch_date: str):
     return response.get("Items", [])
 
 
-def query_all(limit=20):
-    response = table.scan(Limit=limit)
-    return response.get("Items", [])
+def query_all():
+    items = []
+    response = table.scan()
+    items.extend(response.get("Items", []))
+
+    while "LastEvaluatedKey" in response:
+        response = table.scan(
+            ExclusiveStartKey=response["LastEvaluatedKey"]
+        )
+        items.extend(response.get("Items", []))
+
+    return items
