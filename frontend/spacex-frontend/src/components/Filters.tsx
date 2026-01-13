@@ -44,8 +44,6 @@ export default function Filters({ onApply, onClear }: Props) {
         spacing={2}
         alignItems="center"
         flexWrap="wrap"
-        
-       
       >
         <TextField
           select
