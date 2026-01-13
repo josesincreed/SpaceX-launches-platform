@@ -4,19 +4,19 @@ from models import Launch
 import json
 
 
-def lambda_handler(event, context):
-    launches = get_launches()
+def normalize_key(value: str) -> str:
+    return value.strip().upper()
 
-    # 🔹 Limitar ingestión (últimos 10 lanzamientos)
-    launches = launches[:10]
+
+def lambda_handler(event, context):
+    launches = get_launches()[:10]
 
     rocket_cache = {}
     launchpad_cache = {}
-
     processed = 0
 
     for item in launches:
-        status = (
+        status = normalize_key(
             "SUCCESS" if item.get("success") is True
             else "FAILED" if item.get("success") is False
             else "SCHEDULED"
@@ -26,10 +26,10 @@ def lambda_handler(event, context):
         launchpad_id = item["launchpad"]
 
         if rocket_id not in rocket_cache:
-            rocket_cache[rocket_id] = get_rocket_name(rocket_id)
+            rocket_cache[rocket_id] = normalize_key(get_rocket_name(rocket_id))
 
         if launchpad_id not in launchpad_cache:
-            launchpad_cache[launchpad_id] = get_launchpad_name(launchpad_id)
+            launchpad_cache[launchpad_id] = normalize_key(get_launchpad_name(launchpad_id))
 
         launch = Launch(
             launch_id=item["id"],
@@ -46,11 +46,11 @@ def lambda_handler(event, context):
         processed += 1
 
     return {
-    "statusCode": 200,
-    "headers": {
-        "Content-Type": "application/json"
-    },
-    "body": json.dumps({
-        "processed": processed
-    })
-}
+        "statusCode": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "body": json.dumps({
+            "processed": processed
+        })
+    }

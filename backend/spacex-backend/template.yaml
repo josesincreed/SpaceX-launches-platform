@@ -91,6 +91,48 @@ Resources:
             Path: /api/v1/ingest
             Method: POST          
 
+  # Query Lambda Function
+  QueryLaunchesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: spacex-launches-query
+      CodeUri: src/query
+      Handler: app.lambda_handler
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref SpaceXLaunchesTable
+      Events:
+        GetAll:
+          Type: Api
+          Properties:
+            Path: /api/v1/launches
+            Method: GET
+
+        GetByStatus:
+          Type: Api
+          Properties:
+            Path: /api/v1/launches/status/{status}
+            Method: GET
+
+        GetByRocket:
+          Type: Api
+          Properties:
+            Path: /api/v1/launches/rocket/{rocket}
+            Method: GET
+
+        GetByLaunchpad:
+          Type: Api
+          Properties:
+            Path: /api/v1/launches/launchpad/{launchpad}
+            Method: GET
+
+        GetByLaunchDate:
+          Type: Api
+          Properties:
+            Path: /api/v1/launches/date/{launch_date}
+            Method: GET
+
+
 Outputs:
   DynamoDBTableName:
     Description: DynamoDB table name
