@@ -6,8 +6,8 @@ Description: >
 Globals:
   Function:
     Runtime: python3.11
-    Timeout: 30
-    MemorySize: 256
+    Timeout: 60
+    MemorySize: 1024
     Tracing: Active
     Environment:
       Variables:

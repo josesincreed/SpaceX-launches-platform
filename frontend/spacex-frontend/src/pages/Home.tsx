@@ -138,7 +138,12 @@ export default function Home() {
                 <Typography variant="subtitle1" color="text.secondary">
                     Making life multiplanetary
                 </Typography>
+                <br />
+                <IngestionCountdown />
+
             </Box>
+
+
 
             <TextField
                 fullWidth
@@ -171,7 +176,6 @@ export default function Home() {
                 }}
             />
 
-            <IngestionCountdown />
 
 
             {hasActiveFilters && (
@@ -186,7 +190,7 @@ export default function Home() {
 
             <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
                 <Button onClick={() => setShowFilters((v) => !v)}>
-                    {showFilters ? "Ocultar filtros" : "Mostrar filtros"}
+                    {showFilters ? "Ocultar filtros" : "Mostrar filtros avanzados"}
                 </Button>
 
                 {hasActiveFilters && (

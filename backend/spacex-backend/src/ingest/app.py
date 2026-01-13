@@ -1,10 +1,4 @@
-from spacex_client import (
-    get_launches,
-    get_upcoming_launches,
-    get_rocket_name,
-    get_launchpad_name,
-    derive_launch_status
-)
+from spacex_client import (get_historical_launches,   get_upcoming_launches,   get_rocket_name,   get_launchpad_name,   derive_launch_status)
 from dynamodb_repository import upsert_launch
 from models import Launch
 import json
@@ -15,35 +9,34 @@ def normalize_key(value: str) -> str:
 
 
 def lambda_handler(event, context):
-    """
-    Ingesta automática y manual de lanzamientos SpaceX.
+   
+    historical_launches = get_historical_launches()
+    upcoming_launches = get_upcoming_launches(limit=5)
 
-    - Ejecutada cada 6 horas vía EventBridge
-    - Ejecutable manualmente vía API Gateway
-    - Ingiere:
-        • Últimos 56 lanzamientos pasados
-        • Próximos 4 lanzamientos (upcoming)
-    - Aplica upsert idempotente en DynamoDB
-    - Estado normalizado desde spacex_client (single source of truth)
-    """
+    launches_map = {
+        launch["id"]: launch for launch in historical_launches
+    }
 
-    past_launches = get_launches(limit=56)
-    upcoming_launches = get_upcoming_launches(limit=4)
+    for launch in upcoming_launches:
+        launches_map[launch["id"]] = launch
 
-    all_launches = past_launches + upcoming_launches
+    all_launches = list(launches_map.values())
 
-    rocket_cache = {}
-    launchpad_cache = {}
+    rocket_cache: dict[str, str] = {}
+    launchpad_cache: dict[str, str] = {}
+
     processed = 0
 
     for item in all_launches:
-        # 🔹 Estado CANÓNICO
         status = normalize_key(derive_launch_status(item))
 
-        rocket_id = item["rocket"]
-        launchpad_id = item["launchpad"]
+        rocket_id = item.get("rocket")
+        launchpad_id = item.get("launchpad")
 
-        # Cache de nombres (optimización)
+        if not rocket_id or not launchpad_id:
+            continue
+
+        # Cache de nombres, reduce llamadas HTTP
         if rocket_id not in rocket_cache:
             rocket_cache[rocket_id] = normalize_key(
                 get_rocket_name(rocket_id)
@@ -56,7 +49,7 @@ def lambda_handler(event, context):
 
         launch = Launch(
             launch_id=item["id"],
-            mission_name=item.get("name", "Unknown"),
+            mission_name=item.get("name", "UNKNOWN"),
             mission_purpose=item.get("details") or "",
             rocket_name=rocket_cache[rocket_id],
             launch_date=item["date_utc"],
@@ -78,7 +71,7 @@ def lambda_handler(event, context):
         },
         "body": json.dumps({
             "processed": processed,
-            "past_launches": len(past_launches),
+            "historical_launches": len(historical_launches),
             "upcoming_launches": len(upcoming_launches),
             "total": processed
         })

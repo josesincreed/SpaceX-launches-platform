@@ -33,7 +33,7 @@ export default function LaunchesByStatusChart({ launches }: Props) {
       {
         label: "Lanzamientos",
         data: Object.values(statusCount),
-        backgroundColor: ["#4caf50", "#f44336", "#ff9800"]
+        backgroundColor: ["#4caf50", "#ff9800",  "#f44336", ]
       }
     ]
   };
