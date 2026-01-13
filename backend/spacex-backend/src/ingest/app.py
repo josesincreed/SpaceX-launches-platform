@@ -46,11 +46,15 @@ def lambda_handler(event, context):
         processed += 1
 
     return {
-        "statusCode": 200,
-        "headers": {
-            "Content-Type": "application/json"
-        },
-        "body": json.dumps({
-            "processed": processed
-        })
-    }
+    "statusCode": 200,
+    "headers": {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,POST,OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type,Authorization"
+    },
+    "body": json.dumps({
+        "processed": processed
+    })
+}
+

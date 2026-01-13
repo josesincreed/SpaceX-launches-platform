@@ -1,0 +1,223 @@
+openapi: 3.0.3
+
+info:
+  title: SpaceX Launches Platform API
+  version: 1.0.0
+  description: |
+    API REST diseñada para la ingesta, almacenamiento y consulta eficiente
+    de lanzamientos espaciales de SpaceX.
+
+    La plataforma implementa una arquitectura serverless sobre AWS, utilizando
+    AWS Lambda, Amazon API Gateway y Amazon DynamoDB como base de datos principal.
+    El modelo de datos está optimizado para patrones de consulta específicos
+    mediante el uso de Global Secondary Indexes (GSIs), evitando operaciones
+    costosas de tipo Scan y garantizando un acceso eficiente a la información.
+
+    La API expone endpoints orientados a dominio que permiten:
+    - Ingestar información desde la API pública de SpaceX
+    - Consultar lanzamientos por estado, cohete, plataforma de lanzamiento
+      o fecha específica
+    - Mantener consistencia y normalización de datos para asegurar queries
+      determinísticas en DynamoDB
+
+servers:
+  - url: https://{apiId}.execute-api.{region}.amazonaws.com/Prod
+    description: Entorno productivo desplegado en AWS
+    variables:
+      apiId:
+        default: m4r0woavrj
+      region:
+        default: us-east-1
+
+paths:
+  /api/v1/ingest:
+    post:
+      summary: Ingestar lanzamientos de SpaceX
+      description: |
+        Ejecuta el proceso de ingesta de datos desde la API pública de SpaceX.
+        Los lanzamientos obtenidos son transformados, normalizados y almacenados
+        en DynamoDB mediante operaciones de upsert.
+
+        Durante este proceso se garantiza:
+        - Normalización de claves utilizadas por GSIs
+        - Persistencia idempotente
+        - Actualización de índices secundarios
+
+        Este endpoint está pensado para ejecuciones manuales o automatizadas
+        (por ejemplo, mediante EventBridge en escenarios productivos).
+      responses:
+        '200':
+          description: Ingesta completada correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  processed:
+                    type: integer
+                    description: Número de lanzamientos procesados
+                    example: 10
+
+  /api/v1/launches:
+    get:
+      summary: Obtener todos los lanzamientos
+      description: |
+        Retorna una lista limitada de lanzamientos almacenados en DynamoDB.
+        Este endpoint utiliza una operación Scan controlada y está pensado
+        únicamente para fines exploratorios o de validación.
+
+        No debe usarse como mecanismo principal de filtrado en producción.
+      responses:
+        '200':
+          description: Lista de lanzamientos
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Launch'
+
+  /api/v1/launches/status/{status}:
+    get:
+      summary: Consultar lanzamientos por estado
+      description: |
+        Retorna los lanzamientos filtrados por estado operativo.
+
+        Este endpoint utiliza el índice secundario global **GSI_Status**,
+        permitiendo consultas eficientes ordenadas cronológicamente.
+      parameters:
+        - name: status
+          in: path
+          required: true
+          description: Estado del lanzamiento
+          schema:
+            type: string
+            enum: [SUCCESS, FAILED, SCHEDULED]
+            example: SUCCESS
+      responses:
+        '200':
+          description: Lanzamientos filtrados por estado
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Launch'
+
+  /api/v1/launches/rocket/{rocket}:
+    get:
+      summary: Consultar lanzamientos por cohete
+      description: |
+        Retorna los lanzamientos asociados a un tipo de cohete específico.
+
+        La consulta se realiza mediante el índice **GSI_Rocket**, garantizando
+        eficiencia y evitando escaneos completos de la tabla.
+      parameters:
+        - name: rocket
+          in: path
+          required: true
+          description: Nombre del cohete (normalizado)
+          schema:
+            type: string
+            example: FALCON 9
+      responses:
+        '200':
+          description: Lanzamientos filtrados por cohete
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Launch'
+
+  /api/v1/launches/launchpad/{launchpad}:
+    get:
+      summary: Consultar lanzamientos por plataforma
+      description: |
+        Retorna los lanzamientos realizados desde una plataforma específica.
+
+        Este endpoint utiliza el índice **GSI_Launchpad** para resolver
+        la consulta de forma eficiente.
+      parameters:
+        - name: launchpad
+          in: path
+          required: true
+          description: Nombre de la plataforma de lanzamiento
+          schema:
+            type: string
+            example: CCSFS SLC 40
+      responses:
+        '200':
+          description: Lanzamientos filtrados por plataforma
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Launch'
+
+  /api/v1/launches/date/{launch_date}:
+    get:
+      summary: Consultar lanzamientos por fecha
+      description: |
+        Retorna los lanzamientos correspondientes a una fecha específica
+        en formato ISO 8601.
+
+        La consulta utiliza el índice **GSI_LaunchDate**, permitiendo
+        coincidencias exactas por fecha.
+      parameters:
+        - name: launch_date
+          in: path
+          required: true
+          description: Fecha del lanzamiento en formato ISO 8601
+          schema:
+            type: string
+            example: 2013-03-01T19:10:00.000Z
+      responses:
+        '200':
+          description: Lanzamientos filtrados por fecha
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Launch'
+
+components:
+  schemas:
+    Launch:
+      type: object
+      description: Representación de un lanzamiento espacial de SpaceX
+      properties:
+        launch_id:
+          type: string
+          description: Identificador único del lanzamiento
+        mission_name:
+          type: string
+          description: Nombre de la misión
+        mission_purpose:
+          type: string
+          description: Descripción del objetivo de la misión
+        rocket_name:
+          type: string
+          description: Nombre del cohete utilizado
+        launch_date:
+          type: string
+          format: date-time
+          description: Fecha y hora del lanzamiento (UTC)
+        status:
+          type: string
+          description: Estado final del lanzamiento
+          enum: [SUCCESS, FAILED, SCHEDULED]
+        launchpad:
+          type: string
+          description: Plataforma de lanzamiento
+        payloads:
+          type: array
+          description: Identificadores de cargas útiles
+          items:
+            type: string
+        last_updated:
+          type: string
+          format: date-time
+          description: Fecha de última actualización del registro
