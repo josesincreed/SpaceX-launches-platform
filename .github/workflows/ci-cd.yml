@@ -1,0 +1,31 @@
+name: CI/CD SpaceX Platform
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-backend:
+    name: Run backend unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          cd backend/spacex-backend
+          pip install -r src/ingest/requirements.txt
+          pip install -r tests/requirements.txt
+
+      - name: Run pytest
+        run: |
+          cd backend/spacex-backend
+          python -m pytest

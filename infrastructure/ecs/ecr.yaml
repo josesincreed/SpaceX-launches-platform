@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: ECR repository for SpaceX frontend
+
+Resources:
+  SpaceXFrontendRepository:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: spacex-frontend
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      ImageTagMutability: MUTABLE
+
+Outputs:
+  RepositoryUri:
+    Description: ECR repository URI
+    Value: !GetAtt SpaceXFrontendRepository.RepositoryUri

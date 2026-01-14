@@ -1,0 +1,52 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: ECS Service for SpaceX Frontend
+
+Parameters:
+  ClusterName:
+    Type: String
+    Description: ECS Cluster name
+
+  TaskDefinitionArn:
+    Type: String
+    Description: Task definition ARN
+
+  TargetGroupArn:
+    Type: String
+    Description: ALB Target Group ARN
+
+  Subnets:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: Subnets for ECS tasks
+
+Resources:
+  ECSServiceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow traffic from ALB
+      VpcId: vpc-0293617b3f00dd458
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !ImportValue spacex-alb-ALBSecurityGroup
+
+  SpaceXFrontendService:
+    Type: AWS::ECS::Service
+    DependsOn: 
+      - ECSServiceSecurityGroup
+    Properties:
+      ServiceName: spacex-frontend-service
+      Cluster: !Ref ClusterName
+      LaunchType: FARGATE
+      DesiredCount: 1
+      TaskDefinition: !Ref TaskDefinitionArn
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets: !Ref Subnets
+          SecurityGroups:
+            - !Ref ECSServiceSecurityGroup
+      LoadBalancers:
+        - ContainerName: spacex-frontend
+          ContainerPort: 80
+          TargetGroupArn: !Ref TargetGroupArn

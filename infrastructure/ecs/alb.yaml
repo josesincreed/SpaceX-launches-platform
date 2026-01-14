@@ -1,0 +1,70 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Application Load Balancer for SpaceX Frontend
+
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+    Description: VPC where ALB will be created
+
+  PublicSubnets:
+    Type: List<AWS::EC2::Subnet::Id>
+    Description: Public subnets for ALB
+
+Resources:
+  ALBSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow HTTP traffic
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+
+  SpaceXTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: spacex-frontend-tg
+      Port: 80
+      Protocol: HTTP
+      TargetType: ip
+      VpcId: !Ref VpcId
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+
+  SpaceXLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: spacex-frontend-alb
+      Scheme: internet-facing
+      Type: application
+      Subnets: !Ref PublicSubnets
+      SecurityGroups:
+        - !Ref ALBSecurityGroup
+
+  HTTPListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref SpaceXLoadBalancer
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref SpaceXTargetGroup
+
+Outputs:
+  LoadBalancerDNS:
+    Description: Public DNS of ALB
+    Value: !GetAtt SpaceXLoadBalancer.DNSName
+
+  TargetGroupArn:
+    Description: Target Group ARN
+    Value: !Ref SpaceXTargetGroup
+
+  ALBSecurityGroupId:
+    Description: ALB Security Group ID
+    Value: !Ref ALBSecurityGroup
+    Export:
+      Name: spacex-alb-ALBSecurityGroup
+

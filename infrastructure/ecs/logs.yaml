@@ -1,0 +1,9 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: CloudWatch Log Group for ECS Frontend
+
+Resources:
+  SpaceXFrontendLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /ecs/spacex-frontend
+      RetentionInDays: 7

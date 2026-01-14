@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: ECS Cluster for SpaceX Frontend (Fargate)
+
+Resources:
+  SpaceXEcsCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: spacex-frontend-cluster
+      CapacityProviders:
+        - FARGATE
+        - FARGATE_SPOT
+
+Outputs:
+  ClusterName:
+    Description: ECS Cluster Name
+    Value: !Ref SpaceXEcsCluster

@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: ECS Task Definition for SpaceX Frontend
+
+Resources:
+  SpaceXFrontendTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: spacex-frontend-task
+      Cpu: "256"
+      Memory: "512"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+
+      ExecutionRoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/spacex-ecs-execution-role
+      TaskRoleArn: !Sub arn:aws:iam::${AWS::AccountId}:role/spacex-ecs-task-role
+
+      ContainerDefinitions:
+        - Name: spacex-frontend
+          Image: nginx:alpine
+          Essential: true
+          PortMappings:
+            - ContainerPort: 80
+              Protocol: tcp
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: /ecs/spacex-frontend
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: ecs
