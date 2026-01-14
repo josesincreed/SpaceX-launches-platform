@@ -18,32 +18,6 @@ La plataforma consume datos públicos de la **API oficial de SpaceX** y permite 
 
 La solución implementa una **arquitectura híbrida en AWS**, combinando serverless y contenedores, siguiendo un patrón **monorepo bien organizado**.
 
-# 🚀 SpaceX Launches Platform
-
-## 📌 Descripción general
-
-**SpaceX Launches Platform** es una plataforma cloud-native desarrollada como prueba técnica, cuyo objetivo es demostrar el diseño e implementación de una solución moderna en AWS capaz de:
-
-- Ingerir datos externos de forma automática
-- Normalizar y persistir información de manera idempotente
-- Exponer datos listos para ser consumidos por un frontend moderno
-- Escalar y evolucionar hacia una arquitectura basada en contenedores
-- Implementar CI/CD end-to-end con infraestructura como código
-
-La plataforma consume datos públicos de la **API oficial de SpaceX** y permite explorar lanzamientos históricos y futuros mediante filtros, visualizaciones y métricas.
-
----
-
-## 🏗️ Arquitectura de la solución
-
-La solución implementa una **arquitectura híbrida en AWS**, combinando serverless y contenedores, siguiendo un patrón **monorepo bien organizado**.
-
-spacex-launches-platform/
-├── backend/ # Backend serverless (AWS SAM)
-├── frontend/ # Frontend React + TypeScript
-├── infrastructure/ # Infraestructura ECS / ECR (CloudFormation)
-├── .github/ # CI/CD (GitHub Actions)
-└── README.md
 
 ### Componentes principales
 
