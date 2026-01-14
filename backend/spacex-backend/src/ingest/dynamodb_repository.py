@@ -1,17 +1,14 @@
 import os
+import boto3
 from datetime import datetime
-from models import Launch
-
-IS_LOCAL = os.environ.get("AWS_SAM_LOCAL") == "true"
-
+from .models import Launch
 
 def upsert_launch(launch: Launch):
-    if IS_LOCAL:
-        # Entono de pruebas local, no se realiza ninguna operación real
+    is_local = os.environ.get("AWS_SAM_LOCAL") == "true"
+
+    if is_local:
         print(f"[LOCAL MODE] Upsert launch {launch.launch_id}")
         return
-
-    import boto3
 
     table = boto3.resource("dynamodb").Table(os.environ["TABLE_NAME"])
 

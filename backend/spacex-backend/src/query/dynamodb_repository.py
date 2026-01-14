@@ -1,51 +1,47 @@
 import os
 import boto3
-from boto3.dynamodb.conditions import Key
-
-table = boto3.resource("dynamodb").Table(os.environ["TABLE_NAME"])
 
 
-def query_by_status(status: str):
-    response = table.query(
-        IndexName="GSI_Status",
-        KeyConditionExpression=Key("status").eq(status)
-    )
-    return response.get("Items", [])
-
-
-def query_by_rocket(rocket_name: str):
-    response = table.query(
-        IndexName="GSI_Rocket",
-        KeyConditionExpression=Key("rocket_name").eq(rocket_name)
-    )
-    return response.get("Items", [])
-
-
-def query_by_launchpad(launchpad: str):
-    response = table.query(
-        IndexName="GSI_Launchpad",
-        KeyConditionExpression=Key("launchpad").eq(launchpad)
-    )
-    return response.get("Items", [])
-
-
-def query_by_launch_date(launch_date: str):
-    response = table.query(
-        IndexName="GSI_LaunchDate",
-        KeyConditionExpression=Key("launch_date").eq(launch_date)
-    )
-    return response.get("Items", [])
+def _get_table():
+    return boto3.resource("dynamodb").Table(os.environ["TABLE_NAME"])
 
 
 def query_all():
-    items = []
-    response = table.scan()
-    items.extend(response.get("Items", []))
+    table = _get_table()
+    return table.scan()["Items"]
 
-    while "LastEvaluatedKey" in response:
-        response = table.scan(
-            ExclusiveStartKey=response["LastEvaluatedKey"]
-        )
-        items.extend(response.get("Items", []))
 
-    return items
+def query_by_status(status: str):
+    table = _get_table()
+    return table.query(
+        IndexName="status-index",
+        KeyConditionExpression="status = :s",
+        ExpressionAttributeValues={":s": status}
+    )["Items"]
+
+
+def query_by_rocket(rocket: str):
+    table = _get_table()
+    return table.query(
+        IndexName="rocket_name-index",
+        KeyConditionExpression="rocket_name = :r",
+        ExpressionAttributeValues={":r": rocket}
+    )["Items"]
+
+
+def query_by_launchpad(launchpad: str):
+    table = _get_table()
+    return table.query(
+        IndexName="launchpad-index",
+        KeyConditionExpression="launchpad = :l",
+        ExpressionAttributeValues={":l": launchpad}
+    )["Items"]
+
+
+def query_by_launch_date(date: str):
+    table = _get_table()
+    return table.query(
+        IndexName="launch_date-index",
+        KeyConditionExpression="launch_date = :d",
+        ExpressionAttributeValues={":d": date}
+    )["Items"]

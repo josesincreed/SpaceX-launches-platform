@@ -1,7 +1,7 @@
 import json
 from urllib.parse import unquote_plus
 
-from dynamodb_repository import (
+from .dynamodb_repository import (
     query_all,
     query_by_status,
     query_by_rocket,
@@ -16,7 +16,7 @@ def normalize_key(value: str) -> str:
 
 def lambda_handler(event, context):
     params = event.get("pathParameters") or {}
-\
+
     if "status" in params:
         items = query_by_status(normalize_key(params["status"]))
 
