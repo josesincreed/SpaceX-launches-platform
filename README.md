@@ -2,7 +2,7 @@
 
 ## 📌 Descripción general
 
-**SpaceX Launches Platform** es una plataforma cloud-native desarrollada como prueba técnica, cuyo objetivo es demostrar el diseño e implementación de una solución moderna en AWS capaz de:
+**SpaceX Launches Platform** es una plataforma cloud-native, cuyo objetivo es demostrar el diseño e implementación de una solución moderna en AWS capaz de:
 
 - Ingerir datos externos de forma automática
 - Normalizar y persistir información de manera idempotente
