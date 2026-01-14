@@ -1,7 +1,8 @@
 import os
 import boto3
 from datetime import datetime
-from .models import Launch
+from models import Launch
+
 
 def upsert_launch(launch: Launch):
     is_local = os.environ.get("AWS_SAM_LOCAL") == "true"

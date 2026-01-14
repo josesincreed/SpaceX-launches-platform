@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 
-# Agrega /src al PYTHONPATH para pytest
-SRC_PATH = Path(__file__).resolve().parents[1] / "src"
-sys.path.insert(0, str(SRC_PATH))
+BASE_DIR = Path(__file__).resolve().parents[1]
+
+sys.path.insert(0, str(BASE_DIR / "src" / "ingest"))
+sys.path.insert(0, str(BASE_DIR / "src" / "query"))

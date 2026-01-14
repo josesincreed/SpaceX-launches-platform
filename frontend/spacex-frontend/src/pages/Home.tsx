@@ -136,7 +136,7 @@ export default function Home() {
                     🚀 SpaceX Launches
                 </Typography>
                 <Typography variant="subtitle1" color="text.secondary">
-                    Making life multiplanetary
+                    Making life multiplanetary 
                 </Typography>
                 <br />
                 <IngestionCountdown />
@@ -245,7 +245,7 @@ export default function Home() {
                     {viewMode === "cards" &&
                         "Explora los lanzamientos mediante tarjetas visuales con información clave."}
                     {viewMode === "table" &&
-                        "Vista tabular con detalles completos y opciones de paginación."}
+                        "Vista detallada con información completa y opciones de paginación."}
                     {viewMode === "charts" &&
                         "Análisis visual de tendencias, estados y evolución de lanzamientos."}
                 </Typography>

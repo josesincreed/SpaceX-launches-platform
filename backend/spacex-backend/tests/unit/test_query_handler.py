@@ -1,7 +1,14 @@
 import json
+import os
 from unittest.mock import patch
 
-from query.app import lambda_handler, normalize_key
+from src.query.app import lambda_handler, normalize_key
+
+
+# ---- SETUP GLOBAL PARA TESTS ----
+def setup_module(module):
+    # Evita KeyError: TABLE_NAME en imports internos
+    os.environ["TABLE_NAME"] = "test-table"
 
 
 def test_normalize_key():
@@ -9,7 +16,7 @@ def test_normalize_key():
     assert normalize_key("Falcon%209") == "FALCON 9"
 
 
-@patch("query.app.query_by_status")
+@patch("src.query.app.query_by_status")
 def test_query_by_status(mock_query_by_status):
     mock_query_by_status.return_value = [{"id": "1"}]
 
@@ -28,7 +35,7 @@ def test_query_by_status(mock_query_by_status):
     mock_query_by_status.assert_called_once_with("SUCCESS")
 
 
-@patch("query.app.query_by_rocket")
+@patch("src.query.app.query_by_rocket")
 def test_query_by_rocket(mock_query_by_rocket):
     mock_query_by_rocket.return_value = [{"id": "2"}]
 
@@ -45,7 +52,7 @@ def test_query_by_rocket(mock_query_by_rocket):
     mock_query_by_rocket.assert_called_once_with("FALCON 9")
 
 
-@patch("query.app.query_all")
+@patch("src.query.app.query_all")
 def test_query_all(mock_query_all):
     mock_query_all.return_value = [{"id": "ALL"}]
 

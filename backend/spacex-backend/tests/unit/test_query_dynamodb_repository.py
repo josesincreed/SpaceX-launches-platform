@@ -1,7 +1,7 @@
 import os
 from unittest.mock import MagicMock, patch
 
-from query.dynamodb_repository import (
+from query.dynamodb_query_repository import (
     query_all,
     query_by_status,
     query_by_rocket,
@@ -11,7 +11,7 @@ from query.dynamodb_repository import (
 
 
 @patch.dict(os.environ, {"TABLE_NAME": "test-table"})
-@patch("query.dynamodb_repository.boto3")
+@patch("query.dynamodb_query_repository.boto3")
 def test_query_all(mock_boto3):
     mock_table = MagicMock()
     mock_table.scan.return_value = {"Items": [{"id": "1"}]}
@@ -25,7 +25,7 @@ def test_query_all(mock_boto3):
 
 
 @patch.dict(os.environ, {"TABLE_NAME": "test-table"})
-@patch("query.dynamodb_repository.boto3")
+@patch("query.dynamodb_query_repository.boto3")
 def test_query_by_status(mock_boto3):
     mock_table = MagicMock()
     mock_table.query.return_value = {"Items": [{"status": "SUCCESS"}]}
@@ -44,7 +44,7 @@ def test_query_by_status(mock_boto3):
 
 
 @patch.dict(os.environ, {"TABLE_NAME": "test-table"})
-@patch("query.dynamodb_repository.boto3")
+@patch("query.dynamodb_query_repository.boto3")
 def test_query_by_rocket(mock_boto3):
     mock_table = MagicMock()
     mock_table.query.return_value = {"Items": [{"rocket_name": "FALCON 9"}]}
@@ -63,7 +63,7 @@ def test_query_by_rocket(mock_boto3):
 
 
 @patch.dict(os.environ, {"TABLE_NAME": "test-table"})
-@patch("query.dynamodb_repository.boto3")
+@patch("query.dynamodb_query_repository.boto3")
 def test_query_by_launchpad(mock_boto3):
     mock_table = MagicMock()
     mock_table.query.return_value = {"Items": [{"launchpad": "KSC"}]}
@@ -82,7 +82,7 @@ def test_query_by_launchpad(mock_boto3):
 
 
 @patch.dict(os.environ, {"TABLE_NAME": "test-table"})
-@patch("query.dynamodb_repository.boto3")
+@patch("query.dynamodb_query_repository.boto3")
 def test_query_by_launch_date(mock_boto3):
     mock_table = MagicMock()
     mock_table.query.return_value = {"Items": [{"launch_date": "2020-05-30"}]}

@@ -1,12 +1,12 @@
-from .spacex_client import (
+from spacex_client import (
     get_historical_launches,
     get_upcoming_launches,
     get_rocket_name,
     get_launchpad_name,
     derive_launch_status
 )
-from .dynamodb_repository import upsert_launch
-from .models import Launch
+from dynamodb_repository import upsert_launch
+from models import Launch
 import json
 
 
