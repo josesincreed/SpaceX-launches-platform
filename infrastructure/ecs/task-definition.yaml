@@ -17,7 +17,7 @@ Resources:
 
       ContainerDefinitions:
         - Name: spacex-frontend
-          Image: nginx:alpine
+          Image: 890009361711.dkr.ecr.us-east-1.amazonaws.com/spacex-frontend:latest
           Essential: true
           PortMappings:
             - ContainerPort: 80
