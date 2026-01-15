@@ -224,3 +224,106 @@ Este proyecto demuestra:
 
 
 
+
+```
+SpaceX-launches-platform
+├─ backend
+│  ├─ spacex-backend
+│  │  ├─ .pytest_cache
+│  │  │  ├─ CACHEDIR.TAG
+│  │  │  ├─ README.md
+│  │  │  └─ v
+│  │  │     └─ cache
+│  │  │        ├─ lastfailed
+│  │  │        └─ nodeids
+│  │  ├─ events
+│  │  │  └─ ingest-event.json
+│  │  ├─ pytest.ini
+│  │  ├─ README.md
+│  │  ├─ samconfig.toml
+│  │  ├─ src
+│  │  │  ├─ ingest
+│  │  │  │  ├─ app.py
+│  │  │  │  ├─ dynamodb_repository.py
+│  │  │  │  ├─ models.py
+│  │  │  │  ├─ requirements.txt
+│  │  │  │  ├─ spacex_client.py
+│  │  │  │  └─ __init__.py
+│  │  │  └─ query
+│  │  │     ├─ app.py
+│  │  │     ├─ dynamodb_query_repository.py
+│  │  │     ├─ requirements.txt
+│  │  │     └─ __init__.py
+│  │  ├─ swagger-ui
+│  │  │  ├─ app.py
+│  │  │  ├─ openapi.yaml
+│  │  │  └─ requirements.txt
+│  │  ├─ template.yaml
+│  │  ├─ tests
+│  │  │  ├─ conftest.py
+│  │  │  ├─ integration
+│  │  │  │  └─ __init__.py
+│  │  │  ├─ requirements.txt
+│  │  │  ├─ unit
+│  │  │  │  ├─ test_dynamodb_repository.py
+│  │  │  │  ├─ test_ingest_handler.py
+│  │  │  │  ├─ test_models.py
+│  │  │  │  ├─ test_query_dynamodb_repository.py
+│  │  │  │  ├─ test_query_handler.py
+│  │  │  │  ├─ test_spacex_client.py
+│  │  │  │  └─ __init__.py
+│  │  │  └─ __init__.py
+│  │  └─ __init__.py
+│  └─ tests
+├─ frontend
+│  └─ spacex-frontend
+│     ├─ docker-compose.yml
+│     ├─ Dockerfile
+│     ├─ eslint.config.js
+│     ├─ index.html
+│     ├─ nginx.conf
+│     ├─ package-lock.json
+│     ├─ package.json
+│     ├─ README.md
+│     ├─ src
+│     │  ├─ api
+│     │  │  └─ spacexApi.ts
+│     │  ├─ App.tsx
+│     │  ├─ components
+│     │  │  ├─ charts
+│     │  │  │  ├─ LaunchesByStatusChart.tsx
+│     │  │  │  └─ LaunchesByYearChart.tsx
+│     │  │  ├─ Filters.tsx
+│     │  │  ├─ IngestionCountdown.tsx
+│     │  │  ├─ LaunchCard.tsx
+│     │  │  ├─ LaunchList.tsx
+│     │  │  ├─ LaunchTable.tsx
+│     │  │  ├─ layout
+│     │  │  │  ├─ Footer.tsx
+│     │  │  │  └─ Header.tsx
+│     │  │  └─ Loader.tsx
+│     │  ├─ main.tsx
+│     │  ├─ models
+│     │  │  └─ Launch.ts
+│     │  ├─ pages
+│     │  │  ├─ About.tsx
+│     │  │  └─ Home.tsx
+│     │  └─ router
+│     │     └─ AppRouter.tsx
+│     ├─ tsconfig.app.json
+│     ├─ tsconfig.json
+│     ├─ tsconfig.node.json
+│     └─ vite.config.ts
+├─ infrastructure
+│  └─ ecs
+│     ├─ alb.yaml
+│     ├─ aws
+│     ├─ ecr.yaml
+│     ├─ ecs-cluster.yaml
+│     ├─ iam.yaml
+│     ├─ logs.yaml
+│     ├─ service.yaml
+│     └─ task-definition.yaml
+└─ README.md
+
+```
