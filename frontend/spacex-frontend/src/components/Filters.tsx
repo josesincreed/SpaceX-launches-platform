@@ -1,4 +1,12 @@
-import { Box, Button, MenuItem, TextField, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  MenuItem,
+  TextField,
+  Stack,
+  Typography,
+  Divider,
+} from "@mui/material";
 import { useState } from "react";
 
 export interface FiltersValues {
@@ -24,7 +32,7 @@ export default function Filters({ onApply, onClear }: Props) {
       status: status || undefined,
       rocket: rocket || undefined,
       launchpad: launchpad || undefined,
-      date: date || undefined
+      date: date || undefined,
     });
   }
 
@@ -38,7 +46,20 @@ export default function Filters({ onApply, onClear }: Props) {
 
   return (
     <Box>
-      {/* FILTROS EN FILA */}
+      {/* HEADER */}
+      <Typography
+        variant="subtitle2"
+        sx={{
+          mb: 2,
+          letterSpacing: "0.12em",
+        }}
+      >
+        ADVANCED FILTERS
+      </Typography>
+
+      <Divider sx={{ mb: 3 }} />
+
+      {/* FILTER CONTROLS */}
       <Stack
         direction={{ xs: "column", md: "row" }}
         spacing={2}
@@ -56,7 +77,7 @@ export default function Filters({ onApply, onClear }: Props) {
           <MenuItem value="">Todos</MenuItem>
           <MenuItem value="SUCCESS">SUCCESS</MenuItem>
           <MenuItem value="FAILED">FAILED</MenuItem>
-          <MenuItem value="SCHEDULED">SCHEDULED</MenuItem>
+          <MenuItem value="UPCOMING">UPCOMING</MenuItem>
         </TextField>
 
         <TextField
@@ -86,12 +107,27 @@ export default function Filters({ onApply, onClear }: Props) {
           sx={{ minWidth: 150 }}
         />
 
-        {/* BOTONES */}
-        <Stack direction="row" spacing={1} sx={{ ml: "auto" }}>
-          <Button size="small" variant="outlined" onClick={handleClear}>
+        {/* ACTIONS */}
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ ml: { md: "auto" } }}
+        >
+          <Button
+            size="small"
+            variant="outlined"
+            onClick={handleClear}
+            sx={{ textTransform: "none" }}
+          >
             Limpiar
           </Button>
-          <Button size="small" variant="contained" onClick={handleApply}>
+
+          <Button
+            size="small"
+            variant="contained"
+            onClick={handleApply}
+            sx={{ textTransform: "none" }}
+          >
             Aplicar
           </Button>
         </Stack>

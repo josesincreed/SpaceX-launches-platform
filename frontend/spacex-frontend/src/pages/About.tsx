@@ -1,124 +1,188 @@
-import { Box, Typography, Divider, Paper, Stack } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Divider,
+  Paper,
+  Stack,
+} from "@mui/material";
 
-const paperStyle = {
+const sectionCard = {
   p: 3,
+  borderRadius: 3,
+  backgroundColor: "background.paper",
   transition: "all 0.3s ease",
-  cursor: "default",
   "&:hover": {
     transform: "translateY(-4px)",
-    boxShadow: "0 12px 30px rgba(0,0,0,0.12)"
-  }
+    boxShadow: "0 15px 40px rgba(30,136,229,0.25)",
+  },
 };
 
 export default function About() {
   return (
     <Box sx={{ maxWidth: 1000, mx: "auto", p: 3 }}>
       {/* HEADER */}
-      <Box sx={{ textAlign: "center", mb: 4 }}>
-        <Typography variant="h4" fontWeight={700} gutterBottom>
-          Sobre este proyecto
+      <Box sx={{ textAlign: "center", mb: 6 }}>
+        <Typography
+          variant="h4"
+          fontWeight={700}
+          sx={{ letterSpacing: "0.08em" }}
+          gutterBottom
+        >
+          SOBRE EL PROYECTO
         </Typography>
-        <Typography variant="subtitle1" color="text.secondary">
-          Diseño, arquitectura y decisiones técnicas detrás de la solución
+
+        <Typography
+          variant="subtitle1"
+          color="text.secondary"
+          sx={{ letterSpacing: "0.12em" }}
+        >
+          Arquitectura, diseño y decisiones técnicas
         </Typography>
       </Box>
 
-      <Typography variant="body1" sx={{ mb: 3 }}>
-        Esta plataforma fue desarrollada como una <strong>prueba técnica integral </strong>
-        con el objetivo de demostrar la capacidad de diseñar e implementar una
-        aplicación moderna, escalable y orientada a la nube, cubriendo tanto
-        backend como frontend, con foco en buenas prácticas, experiencia de usuario
-        y preparación para entornos productivos.
+      {/* INTRO */}
+      <Typography variant="body1" sx={{ mb: 4 }}>
+        Esta plataforma fue desarrollada como una{" "}
+        <strong>prueba técnica integral</strong> con el
+        objetivo de demostrar la capacidad de diseñar e
+        implementar una aplicación moderna, escalable y
+        orientada a la nube, cubriendo tanto backend como
+        frontend, con un fuerte enfoque en buenas prácticas,
+        experiencia de usuario y preparación para entornos
+        productivos.
       </Typography>
 
-      <Divider sx={{ mb: 4 }} />
+      <Divider sx={{ mb: 5 }} />
 
-      <Stack spacing={3}>
+      <Stack spacing={4}>
         {/* BACKEND */}
-        <Paper sx={paperStyle}>
-          <Typography variant="h6" gutterBottom>
+        <Paper sx={sectionCard}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ letterSpacing: "0.06em" }}
+          >
             🧠 Arquitectura Backend (Serverless)
           </Typography>
-          <Typography variant="body2">
-            El backend está construido sobre una arquitectura <strong>serverless en AWS</strong>,
-            utilizando API Gateway para exponer endpoints REST y AWS Lambda para
-            ejecutar la lógica de negocio. Este enfoque permite escalar automáticamente,
-            reducir costos operativos y eliminar la necesidad de administrar servidores.
-            <br /><br />
-            Los datos se almacenan en <strong>Amazon DynamoDB</strong> bajo un diseño de
-            tabla única, complementado con múltiples <strong>Global Secondary Indexes (GSI)</strong>,
-            lo que permite consultas eficientes por estado del lanzamiento, cohete,
-            plataforma y fecha sin necesidad de scans costosos.
+
+          <Typography variant="body2" color="text.secondary">
+            El backend está construido sobre una{" "}
+            <strong>arquitectura serverless en AWS</strong>,
+            utilizando API Gateway para exponer endpoints REST
+            y AWS Lambda para ejecutar la lógica de negocio.
+            <br />
+            <br />
+            Los datos se almacenan en{" "}
+            <strong>Amazon DynamoDB</strong> bajo un diseño de
+            tabla única, complementado con múltiples{" "}
+            <strong>Global Secondary Indexes (GSI)</strong>,
+            lo que permite realizar consultas eficientes por
+            estado del lanzamiento, cohete, plataforma y fecha
+            sin necesidad de realizar scans costosos.
           </Typography>
         </Paper>
 
         {/* INGESTA */}
-        <Paper sx={paperStyle}>
-          <Typography variant="h6" gutterBottom>
+        <Paper sx={sectionCard}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ letterSpacing: "0.06em" }}
+          >
             🚀 Ingesta de datos
           </Typography>
-          <Typography variant="body2">
-            La ingesta de información se realiza mediante una función Lambda que
-            consume la API pública de SpaceX. Los datos son normalizados antes de
-            persistirse, asegurando consistencia y compatibilidad con los índices
-            definidos.
-            <br /><br />
-            El proceso es <strong>idempotente</strong>, lo que permite reejecuciones
-            seguras y prepara el sistema para futuras automatizaciones, como
-            ejecuciones programadas o pipelines de actualización continua.
+
+          <Typography variant="body2" color="text.secondary">
+            La ingesta de información se realiza mediante una
+            función AWS Lambda que consume la API pública de
+            SpaceX. Los datos son normalizados antes de ser
+            persistidos, garantizando consistencia y
+            compatibilidad con los índices definidos.
+            <br />
+            <br />
+            El proceso es <strong>idempotente</strong>, lo que
+            permite reejecuciones seguras y prepara el sistema
+            para futuras automatizaciones, como ejecuciones
+            programadas o pipelines de actualización continua.
           </Typography>
         </Paper>
 
         {/* FRONTEND */}
-        <Paper sx={paperStyle}>
-          <Typography variant="h6" gutterBottom>
-            🎨 Frontend & Experiencia de Usuario
+        <Paper sx={sectionCard}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ letterSpacing: "0.06em" }}
+          >
+            🎨 Frontend y Experiencia de Usuario
           </Typography>
-          <Typography variant="body2">
-            El frontend fue desarrollado con <strong>React + TypeScript</strong>,
-            utilizando <strong>Material UI</strong> para asegurar consistencia visual,
-            accesibilidad y rapidez de desarrollo.
-            <br /><br />
+
+          <Typography variant="body2" color="text.secondary">
+            El frontend fue desarrollado utilizando{" "}
+            <strong>React + TypeScript</strong>, apoyado en{" "}
+            <strong>Material UI</strong> para garantizar
+            consistencia visual, accesibilidad y rapidez en el
+            desarrollo.
+            <br />
+            <br />
             La interfaz permite:
             <ul>
               <li>Búsqueda en tiempo real</li>
               <li>Filtros combinables (estado, cohete, plataforma, fecha)</li>
               <li>Paginación configurable</li>
-              <li>Múltiples vistas: tarjetas, tabla y gráficas</li>
+              <li>Vistas múltiples: tarjetas, tabla y gráficas</li>
             </ul>
-            Todo el filtrado se aplica de forma coherente en listas, tablas y
-            visualizaciones.
+            Todos los filtros se aplican de forma coherente en
+            listas, tablas y visualizaciones.
           </Typography>
         </Paper>
 
         {/* DATA & UX */}
-        <Paper sx={paperStyle}>
-          <Typography variant="h6" gutterBottom>
-            📊 Visualización, KPIs y UX
+        <Paper sx={sectionCard}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ letterSpacing: "0.06em" }}
+          >
+            📊 Visualización de datos, KPIs y UX
           </Typography>
-          <Typography variant="body2">
-            Se integraron gráficas de Chart.js para analizar tendencias de lanzamientos por año
-            y por estado, junto con tarjetas KPI que resumen métricas clave como
-            total de lanzamientos, tasa de éxito y último lanzamiento.
-            <br /><br />
-            Se añadieron <strong>animaciones, efectos hover y transiciones suaves</strong>
-            para mejorar la percepción de calidad, sin comprometer el rendimiento.
+
+          <Typography variant="body2" color="text.secondary">
+            Se integraron gráficas con Chart.js para analizar
+            tendencias de lanzamientos por año y por estado,
+            junto con tarjetas KPI que resumen métricas clave
+            como el total de lanzamientos, la tasa de éxito y
+            el último lanzamiento registrado.
+            <br />
+            <br />
+            Se añadieron animaciones, efectos hover y
+            transiciones suaves para mejorar la percepción de
+            calidad sin comprometer el rendimiento.
           </Typography>
         </Paper>
 
         {/* CI/CD */}
-        <Paper sx={paperStyle}>
-          <Typography variant="h6" gutterBottom>
+        <Paper sx={sectionCard}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ letterSpacing: "0.06em" }}
+          >
             ⚙️ CI/CD y evolución futura
           </Typography>
-          <Typography variant="body2">
-            El proyecto está preparado para evolucionar hacia un flujo de
-            <strong>CI/CD completo</strong> utilizando GitHub Actions.
-            <br /><br />
-            En etapas posteriores, el backend será containerizado y desplegado en
-            <strong>AWS ECS Fargate</strong> mediante <strong>ECR</strong>, habilitando
-            despliegues controlados, escalado horizontal y estrategias como
-            blue/green deployments.
+
+          <Typography variant="body2" color="text.secondary">
+            El proyecto está diseñado para evolucionar hacia
+            un flujo completo de{" "}
+            <strong>CI/CD mediante GitHub Actions</strong>.
+            <br />
+            <br />
+            En etapas posteriores, el backend será
+            containerizado y desplegado en{" "}
+            <strong>AWS ECS Fargate</strong> a través de{" "}
+            <strong>Amazon ECR</strong>, permitiendo despliegues
+            controlados, escalado horizontal y estrategias
+            avanzadas como despliegues blue/green.
           </Typography>
         </Paper>
       </Stack>
