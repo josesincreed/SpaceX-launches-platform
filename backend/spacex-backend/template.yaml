@@ -144,6 +144,21 @@ Resources:
             Path: /api/v1/launches/date/{launch_date}
             Method: GET
 
+  SwaggerUIFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: spacex-swagger-ui
+      Runtime: python3.11
+      Handler: app.lambda_handler
+      CodeUri: swagger-ui
+      Events:
+        SwaggerUI:
+          Type: Api
+          Properties:
+            Path: /swagger
+            Method: GET
+
+
 
 Outputs:
   DynamoDBTableName:

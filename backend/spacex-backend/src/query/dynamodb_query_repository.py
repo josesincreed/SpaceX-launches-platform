@@ -14,34 +14,54 @@ def query_all():
 def query_by_status(status: str):
     table = _get_table()
     return table.query(
-        IndexName="status-index",
-        KeyConditionExpression="status = :s",
-        ExpressionAttributeValues={":s": status}
+        IndexName="GSI_Status",
+        KeyConditionExpression="#st = :s",
+        ExpressionAttributeNames={
+            "#st": "status"
+        },
+        ExpressionAttributeValues={
+            ":s": status
+        }
     )["Items"]
 
 
 def query_by_rocket(rocket: str):
     table = _get_table()
     return table.query(
-        IndexName="rocket_name-index",
-        KeyConditionExpression="rocket_name = :r",
-        ExpressionAttributeValues={":r": rocket}
+        IndexName="GSI_Rocket",
+        KeyConditionExpression="#rk = :r",
+        ExpressionAttributeNames={
+            "#rk": "rocket_name"
+        },
+        ExpressionAttributeValues={
+            ":r": rocket
+        }
     )["Items"]
 
 
 def query_by_launchpad(launchpad: str):
     table = _get_table()
     return table.query(
-        IndexName="launchpad-index",
-        KeyConditionExpression="launchpad = :l",
-        ExpressionAttributeValues={":l": launchpad}
+        IndexName="GSI_Launchpad",
+        KeyConditionExpression="#lp = :l",
+        ExpressionAttributeNames={
+            "#lp": "launchpad"
+        },
+        ExpressionAttributeValues={
+            ":l": launchpad
+        }
     )["Items"]
 
 
 def query_by_launch_date(date: str):
     table = _get_table()
     return table.query(
-        IndexName="launch_date-index",
-        KeyConditionExpression="launch_date = :d",
-        ExpressionAttributeValues={":d": date}
+        IndexName="GSI_LaunchDate",
+        KeyConditionExpression="#ld = :d",
+        ExpressionAttributeNames={
+            "#ld": "launch_date"
+        },
+        ExpressionAttributeValues={
+            ":d": date
+        }
     )["Items"]
