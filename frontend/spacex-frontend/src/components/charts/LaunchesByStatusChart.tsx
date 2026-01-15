@@ -39,9 +39,10 @@ export default function LaunchesByStatusChart({ launches }: Props) {
         label: "Launches",
         data: Object.values(statusCount),
         backgroundColor: [
-          "#4caf50", // SUCCESS
-          "#ff9800", // UPCOMING
-          "#f44336", // FAILED
+          
+          "#ff9800", 
+          "#4caf50", 
+          "#f44336", 
         ],
         borderRadius: 6,
         maxBarThickness: 60,

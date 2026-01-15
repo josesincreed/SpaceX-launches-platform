@@ -19,11 +19,7 @@ def create_launch():
         payloads=["P1", "P2"],
     )
 
-
-# -------------------------
 # Tests
-# -------------------------
-
 def test_upsert_launch_local_mode(capsys):
     """
     Si AWS_SAM_LOCAL=true:

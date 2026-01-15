@@ -8,12 +8,7 @@ from ingest.spacex_client import (
     get_rocket_name,
     get_launchpad_name,
 )
-
-
-# -------------------------
 # Helpers
-# -------------------------
-
 def mock_response(json_data, status_code=200):
     mock = MagicMock()
     mock.status_code = status_code
@@ -21,11 +16,7 @@ def mock_response(json_data, status_code=200):
     mock.raise_for_status.return_value = None
     return mock
 
-
-# -------------------------
 # Tests
-# -------------------------
-
 @patch("ingest.spacex_client.requests.post")
 def test_get_upcoming_launches(mock_post):
     mock_post.return_value = mock_response({

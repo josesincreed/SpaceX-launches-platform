@@ -77,7 +77,7 @@ export default function Filters({ onApply, onClear }: Props) {
           <MenuItem value="">Todos</MenuItem>
           <MenuItem value="SUCCESS">SUCCESS</MenuItem>
           <MenuItem value="FAILED">FAILED</MenuItem>
-          <MenuItem value="UPCOMING">UPCOMING</MenuItem>
+          <MenuItem value="SCHEDULED">SCHEDULED</MenuItem>
         </TextField>
 
         <TextField

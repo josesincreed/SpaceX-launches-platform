@@ -15,7 +15,7 @@ export function KpiCards({ launches }: Props) {
     <Stack direction={{ xs: "column", md: "row" }} spacing={2} mb={3}>
       {[["Total lanzamientos", total],
         ["Tasa de éxito", `${rate}%`],
-        ["Último lanzamiento", last?.mission_name ?? "—"]
+        ["Próximo lanzamiento", last?.mission_name ?? "—"]
       ].map(([label, value]) => (
         <Paper
           key={label}

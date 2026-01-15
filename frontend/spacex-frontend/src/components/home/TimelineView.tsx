@@ -1,6 +1,6 @@
-import { Box, Divider, Fade, TablePagination } from "@mui/material";
+import { Box, Divider, TablePagination } from "@mui/material";
 import type { Launch } from "../../models/Launch";
-import LaunchTable from "../LaunchTable";
+import MissionTimeline from "./MissionTimeline";
 
 interface Props {
   launches: Launch[];
@@ -11,7 +11,7 @@ interface Props {
   onRowsPerPageChange: (rows: number) => void;
 }
 
-export default function TableView({
+export default function TimelineView({
   launches,
   total,
   page,
@@ -20,14 +20,10 @@ export default function TableView({
   onRowsPerPageChange,
 }: Props) {
   return (
-    <Box sx={{ p: 2 }}>
-      <Fade in>
-        <Box>
-          <LaunchTable launches={launches} />
-        </Box>
-      </Fade>
+    <Box sx={{ mt: 4 }}>
+      <MissionTimeline launches={launches} />
 
-      <Divider sx={{ my: 2 }} />
+      <Divider sx={{ my: 3 }} />
 
       <TablePagination
         component="div"
@@ -38,7 +34,7 @@ export default function TableView({
         onRowsPerPageChange={(e) =>
           onRowsPerPageChange(parseInt(e.target.value, 10))
         }
-        rowsPerPageOptions={[10, 20, 40, 100]}
+        rowsPerPageOptions={[10, 20, 40]}
       />
     </Box>
   );

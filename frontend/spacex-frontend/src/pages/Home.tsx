@@ -1,19 +1,28 @@
 import { useEffect, useState } from "react";
-import { Box, Typography, Button, Collapse, Paper,} from "@mui/material";
+import { Box, Typography, Button, Collapse, Paper } from "@mui/material";
 import type { Launch } from "../models/Launch";
-import {getAllLaunches,getLaunchesByStatus,getLaunchesByRocket,getLaunchesByLaunchpad,getLaunchesByDate,} from "../api/spacexApi";
+import {
+  getAllLaunches,
+  getLaunchesByStatus,
+  getLaunchesByRocket,
+  getLaunchesByLaunchpad,
+  getLaunchesByDate,
+} from "../api/spacexApi";
+
 import Loader from "../components/Loader";
 import Filters from "../components/Filters";
 import type { FiltersValues } from "../components/Filters";
+
 import { HomeHeader } from "../components/home/HomeHeader";
 import { SearchBar } from "../components/home/SearchBar";
 import { ActiveFilters } from "../components/home/ActiveFilters";
 import { ViewModeSelector } from "../components/home/ViewModeSelector";
 import { CardsView } from "../components/home/CardsView";
-import { TableView } from "../components/home/TableView";
+import TableView from "../components/home/TableView";
 import { ChartsView } from "../components/home/ChartsView";
+import TimelineView from "../components/home/TimelineView";
 
-type ViewMode = "cards" | "table" | "charts";
+import type { ViewMode } from "../models/ViewMode";
 
 export default function Home() {
   const [launches, setLaunches] = useState<Launch[]>([]);
@@ -47,29 +56,30 @@ export default function Home() {
     loadData(getAllLaunches);
   }, []);
 
-  // filtros
-  
+  // =========================
+  // FILTROS
+  // =========================
   function handleApplyFilters(filters: FiltersValues) {
     setActiveFilters(filters);
     setShowFilters(false);
 
-    if (typeof filters.status === "string") {
+    if (filters.status) {
       loadData(() => getLaunchesByStatus(filters.status!));
       return;
     }
 
-    if (typeof filters.rocket === "string") {
+    if (filters.rocket) {
       loadData(() => getLaunchesByRocket(filters.rocket!));
       return;
     }
 
-    if (typeof filters.launchpad === "string") {
+    if (filters.launchpad) {
       loadData(() => getLaunchesByLaunchpad(filters.launchpad!));
       return;
     }
 
     if (
-      typeof filters.date === "string" &&
+      filters.date &&
       /^\d{4}-\d{2}-\d{2}$/.test(filters.date)
     ) {
       loadData(() => getLaunchesByDate(filters.date!));
@@ -79,7 +89,9 @@ export default function Home() {
     loadData(getAllLaunches);
   }
 
-  // search 
+  // =========================
+  // SEARCH + FILTER
+  // =========================
   const safeSearch = search.toLowerCase();
   const filterDate = activeFilters.date?.toLowerCase() ?? "";
 
@@ -113,8 +125,19 @@ export default function Home() {
     );
   });
 
-  // paginación
-  const paginatedLaunches = filteredLaunches.slice(
+  // =========================
+  // 🔑 ORDEN CRONOLÓGICO GLOBAL (FIX CLAVE)
+  // =========================
+  const orderedLaunches = [...filteredLaunches].sort(
+    (a, b) =>
+      new Date(b.launch_date).getTime() -
+      new Date(a.launch_date).getTime()
+  );
+
+  // =========================
+  // PAGINACIÓN (DESPUÉS DE ORDENAR)
+  // =========================
+  const paginatedLaunches = orderedLaunches.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -122,7 +145,9 @@ export default function Home() {
   const hasActiveFilters =
     Object.keys(activeFilters).length > 0 || search.length > 0;
 
-  // render
+  // =========================
+  // RENDER
+  // =========================
   return (
     <Box sx={{ maxWidth: 1200, mx: "auto", p: 3 }}>
       {/* HEADER */}
@@ -182,7 +207,7 @@ export default function Home() {
       <ViewModeSelector
         value={viewMode}
         onChange={setViewMode}
-      />
+      /> <br /> <br />
 
       {/* VIEW DESCRIPTION */}
       {!loading && !error && (
@@ -197,22 +222,20 @@ export default function Home() {
             "Vista detallada con información completa y opciones de paginación."}
           {viewMode === "charts" &&
             "Análisis visual de tendencias, estados y evolución de lanzamientos."}
+          {viewMode === "timeline" &&
+            "Línea de tiempo cronológica de lanzamientos espaciales."}
         </Typography>
       )}
 
       {/* STATES */}
       {loading && <Loader />}
-      {error && (
-        <Typography color="error">
-          {error}
-        </Typography>
-      )}
+      {error && <Typography color="error">{error}</Typography>}
 
       {/* CONTENT */}
       {!loading && !error && viewMode === "cards" && (
         <CardsView
           launches={paginatedLaunches}
-          total={filteredLaunches.length}
+          total={orderedLaunches.length}
           page={page}
           rowsPerPage={rowsPerPage}
           onPageChange={setPage}
@@ -226,7 +249,7 @@ export default function Home() {
       {!loading && !error && viewMode === "table" && (
         <TableView
           launches={paginatedLaunches}
-          total={filteredLaunches.length}
+          total={orderedLaunches.length}
           page={page}
           rowsPerPage={rowsPerPage}
           onPageChange={setPage}
@@ -238,7 +261,21 @@ export default function Home() {
       )}
 
       {!loading && !error && viewMode === "charts" && (
-        <ChartsView launches={filteredLaunches} />
+        <ChartsView launches={orderedLaunches} />
+      )}
+
+      {!loading && !error && viewMode === "timeline" && (
+        <TimelineView
+          launches={paginatedLaunches}
+          total={orderedLaunches.length}
+          page={page}
+          rowsPerPage={rowsPerPage}
+          onPageChange={setPage}
+          onRowsPerPageChange={(rows) => {
+            setRowsPerPage(rows);
+            setPage(0);
+          }}
+        />
       )}
     </Box>
   );

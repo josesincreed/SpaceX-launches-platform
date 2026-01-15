@@ -57,7 +57,7 @@ export default function LaunchesByYearChart({ launches }: Props) {
     ],
   };
 
-  // ⬅️ CLAVE: tipado explícito
+
   const options: ChartOptions<"line"> = {
     responsive: true,
     maintainAspectRatio: false,

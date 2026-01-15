@@ -57,9 +57,7 @@ export default function Header() {
   );
 }
 
-/* =========================
-   NAV BUTTON (REUSABLE)
-========================= */
+// NAV BUTTON (REUSABLE)
 interface NavButtonProps {
   to: string;
   label: string;

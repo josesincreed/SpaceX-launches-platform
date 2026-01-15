@@ -5,9 +5,8 @@ from unittest.mock import patch
 from src.query.app import lambda_handler, normalize_key
 
 
-# ---- SETUP GLOBAL PARA TESTS ----
+# SETUP GLOBAL PARA TESTS 
 def setup_module(module):
-    # Evita KeyError: TABLE_NAME en imports internos
     os.environ["TABLE_NAME"] = "test-table"
 
 

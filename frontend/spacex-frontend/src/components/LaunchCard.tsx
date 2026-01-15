@@ -18,7 +18,7 @@ function getStatusColor(status: string) {
       return "success";
     case "FAILED":
       return "error";
-    case "UPCOMING":
+    case "SCHEDULED":
       return "warning";
     default:
       return "default";
