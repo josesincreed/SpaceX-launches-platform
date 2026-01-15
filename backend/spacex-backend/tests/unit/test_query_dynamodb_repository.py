@@ -37,8 +37,9 @@ def test_query_by_status(mock_boto3):
     assert items == [{"status": "SUCCESS"}]
 
     mock_table.query.assert_called_once_with(
-        IndexName="status-index",
-        KeyConditionExpression="status = :s",
+        IndexName="GSI_Status",
+        KeyConditionExpression="#st = :s",
+        ExpressionAttributeNames={"#st": "status"},
         ExpressionAttributeValues={":s": "SUCCESS"}
     )
 
@@ -56,8 +57,9 @@ def test_query_by_rocket(mock_boto3):
     assert items == [{"rocket_name": "FALCON 9"}]
 
     mock_table.query.assert_called_once_with(
-        IndexName="rocket_name-index",
-        KeyConditionExpression="rocket_name = :r",
+        IndexName="GSI_Rocket",
+        KeyConditionExpression="#rk = :r",
+        ExpressionAttributeNames={"#rk": "rocket_name"},
         ExpressionAttributeValues={":r": "FALCON 9"}
     )
 
@@ -75,8 +77,9 @@ def test_query_by_launchpad(mock_boto3):
     assert items == [{"launchpad": "KSC"}]
 
     mock_table.query.assert_called_once_with(
-        IndexName="launchpad-index",
-        KeyConditionExpression="launchpad = :l",
+        IndexName="GSI_Launchpad",
+        KeyConditionExpression="#lp = :l",
+        ExpressionAttributeNames={"#lp": "launchpad"},
         ExpressionAttributeValues={":l": "KSC"}
     )
 
@@ -94,7 +97,8 @@ def test_query_by_launch_date(mock_boto3):
     assert items == [{"launch_date": "2020-05-30"}]
 
     mock_table.query.assert_called_once_with(
-        IndexName="launch_date-index",
-        KeyConditionExpression="launch_date = :d",
+        IndexName="GSI_LaunchDate",
+        KeyConditionExpression="#ld = :d",
+        ExpressionAttributeNames={"#ld": "launch_date"},
         ExpressionAttributeValues={":d": "2020-05-30"}
     )
