@@ -6,8 +6,8 @@ import {
   LinearScale,
   Tooltip,
   Legend,
-  ChartOptions,
 } from "chart.js";
+import type { ChartOptions } from "chart.js";
 import { Line } from "react-chartjs-2";
 import type { Launch } from "../../models/Launch";
 
@@ -27,10 +27,9 @@ interface Props {
 export default function LaunchesByYearChart({ launches }: Props) {
   const launchesByYear = launches.reduce<Record<string, number>>(
     (acc, launch) => {
-      const year = new Date(
-        launch.launch_date
-      ).getFullYear().toString();
-
+      const year = new Date(launch.launch_date)
+        .getFullYear()
+        .toString();
       acc[year] = (acc[year] || 0) + 1;
       return acc;
     },
@@ -44,7 +43,7 @@ export default function LaunchesByYearChart({ launches }: Props) {
     labels: years,
     datasets: [
       {
-        label: "Launches / Year",
+        label: "Lanzamientos por año",
         data: counts,
         borderColor: "#1e88e5",
         backgroundColor: "rgba(30,136,229,0.25)",
@@ -58,6 +57,7 @@ export default function LaunchesByYearChart({ launches }: Props) {
     ],
   };
 
+  // ⬅️ CLAVE: tipado explícito
   const options: ChartOptions<"line"> = {
     responsive: true,
     maintainAspectRatio: false,

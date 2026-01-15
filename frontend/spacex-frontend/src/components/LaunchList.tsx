@@ -1,4 +1,5 @@
-import { Box, Grid, Typography, Fade } from "@mui/material";
+import { Box, Typography, Fade } from "@mui/material";
+import Grid from "@mui/material/Grid";
 import type { Launch } from "../models/Launch";
 import LaunchCard from "./LaunchCard";
 
@@ -11,16 +12,10 @@ export default function LaunchList({ launches }: Props) {
     return (
       <Fade in>
         <Box sx={{ mt: 6, textAlign: "center" }}>
-          <Typography
-            variant="h6"
-            sx={{ mb: 1, letterSpacing: "0.08em" }}
-          >
+          <Typography variant="h6" sx={{ mb: 1, letterSpacing: "0.08em" }}>
             NO DATA AVAILABLE
           </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-          >
+          <Typography variant="body2" color="text.secondary">
             No hay lanzamientos para mostrar con los filtros actuales
           </Typography>
         </Box>
@@ -30,18 +25,23 @@ export default function LaunchList({ launches }: Props) {
 
   return (
     <Box sx={{ mt: 4 }}>
-      <Grid container spacing={3}>
+      <Grid
+        container
+        spacing={3}
+        sx={{
+          gridTemplateColumns: {
+            xs: "1fr",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+            lg: "repeat(4, 1fr)",
+          },
+          display: "grid",
+        }}
+      >
         {launches.map((launch) => (
-          <Grid
-            key={launch.launch_id}
-            item
-            xs={12}
-            sm={6}
-            md={4}
-            lg={3}
-          >
+          <Box key={launch.launch_id}>
             <LaunchCard launch={launch} />
-          </Grid>
+          </Box>
         ))}
       </Grid>
     </Box>

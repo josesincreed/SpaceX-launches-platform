@@ -5,8 +5,9 @@ import {
   LinearScale,
   Tooltip,
   Legend,
-  ChartOptions,
 } from "chart.js";
+import type { ChartOptions } from "chart.js";
+
 import { Bar } from "react-chartjs-2";
 import type { Launch } from "../../models/Launch";
 
